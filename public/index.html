@@ -27,23 +27,91 @@
   </head>
   <body>
     <nav>
-      <button id="homenav">Home</button>
-      <button id="singlenav">Flip one coin</button>
-      <button id="multinav">Flip multiple coins</button>
-      <button id="guessnav">Guess the result</button>
+      <button id="homenav" onclick=homeNav()>Home</button>
+      <button id="singlenav" onclick=singleNav()>Flip one coin</button>
+      <button id="multinav" onclick=multiNav()>Flip multiple coins</button>
+      <button id="guessnav" onclick=guessNav()>Guess the result</button>
     </nav>
-    <div id="home">
-      
+    <div class="container">
+    <div id="home" class="active">
+      <p>Choose one of the options for coin flip types above!</p>
     </div>    
     <div id="single" class="hidden">
-      
+      <h1>Flip a coin</h1>
+      <form id="coin">
+        <input type="submit" value="Go!">
+      </form>
+      <h2>Result</h2>
+        <p id="result"></p>
     </div>
+    <script>
+      const coin = document.getElementById("coin")
+      coin.addEventListener("submit", flipACoin)
+
+      async function flipACoin(event) {
+        event.preventDefault();
+
+        const endpt = "app/flip/coin/"
+        const url = document.baseURI+endpoint
+
+        const formEvent = event.currentTarget
+        const formData = new FormData(formEvent)
+        // const flip = await sendFlip({url, formData});
+
+        // console.log(flip)
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          }
+        };
+        const response = await fetch(url, options);
+        document.getElementById("result").innerHTML = response.flip
+      }
+    </script>
     <div id="multi" class="hidden">
+      <h1>Flip many coins</h1>
+      <form id="coins">
+        <input type="number" name="number" id="number">
+        <input type="submit" value="Flip 'em!">
+      </form>
+      <h2>Result</h2>
+        <p id="heads"></p>
+        <p id="tails"></p>
+    </div>
+    <script>
+      const coins = document.getElementById("coins")
+      coins.addEventListener("submit", flipCoins)
+
+      async function flipACoin(event) {
+        event.preventDefault();
+
+        const endpt = "app/flip/coins/"
+        const url = document.baseURI+endpoint
+
+        const formEvent = event.currentTarget
+        const formData = new FormData(formEvent)
+        const flip = await sendFlips({url, formData});
+
+        console.log(flip)
+        const options = {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          }
+        };
+        const response = await fetch(url, options);
+        response.json
+      }
+    </script>
       
     </div>
     <div id="guess" class="hidden">
       
     </div>
+  </div>
 	<script src="main.js"></script>
   </body>
 </html>
